@@ -1,0 +1,39 @@
+main:
+  params: [args]
+  steps:
+  - init:
+      assign:
+        - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+        - tfplan_filename: $${args.filename}
+
+  - test_cloudbuild:
+      call: googleapis.cloudbuild.v1.projects.builds.create
+      args:
+        projectId: $${project_id}
+        body:
+          source:
+            repoSource:
+              repoName: ${sourcerepo_name}
+              branchName: main
+          substitutions:
+            _TFPLAN: $${tfplan_filename}
+          steps:
+          - name: "hashicorp/terraform:1.0.2"
+            entrypoint: "sh"
+            args:
+              - "-c"
+              - |
+                  terraform init
+                  terraform plan --out $${_TFPLAN}.binary \
+                    && terraform show -json $${_TFPLAN}.binary > $${_TFPLAN}.json
+                  cat $${_TFPLAN}.json > /builder/outputs/output
+      result: resp
+
+  - test_output:
+      call: sys.log
+      args:
+        text: $${text.replace_all(text.decode(base64.decode(resp.metadata.build.results.buildStepOutputs[0])), "\n", "")}
+        severity: INFO
+
+  - finish:
+      return: "OK"
