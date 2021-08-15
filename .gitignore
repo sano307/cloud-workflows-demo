@@ -1,2 +1,6 @@
 # Terraform
 .terraform
+tmp
+
+# VSCode
+.vscode
