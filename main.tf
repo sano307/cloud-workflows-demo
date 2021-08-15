@@ -24,3 +24,7 @@ module "integration-cloud-source-repository" {
 module "integration-cloud-firestore" {
   source = "./modules/integration-cloud-firestore"
 }
+
+module "integration-cloud-api-gateway" {
+  source = "./modules/integration-cloud-api-gateway"
+}

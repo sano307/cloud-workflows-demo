@@ -1,0 +1,66 @@
+swagger: "2.0"
+info:
+  title: Cloud Workflows Demo
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /hello:
+    get:
+      summary: Get Hello
+      operationId: getHello
+      parameters:
+        - in: query
+          required: true
+          type: string
+          name: nickname
+      x-google-backend:
+        address: ${hello_get_address}
+        protocol: h2
+      responses:
+        '200':
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                example: OK
+        '500':
+          description: "Failed"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                example: NG
+    post:
+      summary: Post Hello
+      operationId: postHello
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - nickname
+            properties:
+              nickname:
+                type: string
+            example:
+              nickname: sano307
+      x-google-backend:
+        address: ${hello_post_address}
+        protocol: h2
+      responses:
+        '200':
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                example: OK
