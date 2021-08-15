@@ -1,4 +1,4 @@
 variable "sourcerepo_name" {
   type = string
-  default = "github_sano307_cloud-workflows-demo"
+  default = "YOUR_SOURCE_REPOSITORY_NAME"
 }

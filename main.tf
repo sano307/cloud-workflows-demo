@@ -2,18 +2,23 @@ terraform {
   required_version = ">= 1.0.0, < 1.1.0"
 
   backend "gcs" {
-    bucket = "test-kim-tf-state"
+    bucket = local.tfstate_bucket_name
     prefix = "cloud-workflows-demo"
   }
 }
 
+locals {
+  project_name = "YOUR_PROJECT_NAME"
+  tfstate_bucket_name = "TFSTATE_BUCKET_NAME"
+}
+
 provider "google" {
-  project = "kim-inseo"
+  project = local.project_name
   region  = "asia-northeast1"
 }
 
 provider "google-beta" {
-  project = "kim-inseo"
+  project = local.project_name
   region  = "asia-northeast1"
 }
 

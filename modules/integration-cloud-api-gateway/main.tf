@@ -2,7 +2,7 @@
 # Cloud Functions
 #----------------------------------------------------------
 resource "google_storage_bucket" "functions" {
-  name = "cm-test-kim-functions"
+  name = var.bucket_name
 }
 
 data "archive_file" "hello_get" {
