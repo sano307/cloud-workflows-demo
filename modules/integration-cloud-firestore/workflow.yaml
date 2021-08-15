@@ -1,0 +1,105 @@
+main:
+  params: [args]
+  steps:
+  - init:
+      assign:
+        - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+
+  - test_firestore_create:
+      call: googleapis.firestore.v1.projects.databases.documents.createDocument
+      args:
+        parent: $${"projects/" + project_id + "/databases/(default)/documents"}
+        collectionId: users
+        documentId: sano307
+        body:
+          fields:
+            nickname:
+              stringValue: sano307
+            greetings:
+              stringValue: Hello World
+      result: resp
+
+  - logging_firestore_create:
+      call: sys.log
+      args:
+        text: $${resp}
+        severity: INFO
+
+  - test_firestore_read:
+      call: googleapis.firestore.v1.projects.databases.documents.get
+      args:
+        name: $${"projects/" + project_id + "/databases/(default)/documents/users/sano307"}
+        mask:
+          fieldPaths:
+            - greetings
+      result: resp
+
+  - logging_firestore_read:
+      call: sys.log
+      args:
+        text: $${resp}
+        severity: INFO
+
+  - test_firestore_update:
+      call: googleapis.firestore.v1.projects.databases.documents.patch
+      args:
+        name: $${"projects/" + project_id + "/databases/(default)/documents/users/sano307"}
+        updateMask:
+          fieldPaths:
+            - greetings
+        currentDocument:
+          exists: true
+        body:
+          fields:
+            greetings:
+              stringValue: Hello World!
+      result: resp
+
+  - logging_firestore_update:
+      call: sys.log
+      args:
+        text: $${resp}
+        severity: INFO
+
+  - test_firestore_confirm:
+      call: googleapis.firestore.v1.projects.databases.documents.runQuery
+      args:
+        parent: $${"projects/" + project_id + "/databases/(default)/documents"}
+        body:
+          structuredQuery:
+            select:
+              fields:
+                fieldPath: greetings
+            from:
+              collectionId: users
+            where:
+              fieldFilter:
+                field:
+                  fieldPath: nickname
+                op: EQUAL
+                value:
+                  stringValue: sano307
+      result: resp
+
+  - logging_firestore_confirm:
+      call: sys.log
+      args:
+        text: $${resp}
+        severity: INFO
+
+  - test_firestore_delete:
+      call: googleapis.firestore.v1.projects.databases.documents.delete
+      args:
+        name: $${"projects/" + project_id + "/databases/(default)/documents/users/sano307"}
+        currentDocument:
+          exists: true
+      result: resp
+
+  - logging_firestore_delete:
+      call: sys.log
+      args:
+        text: $${resp}
+        severity: INFO
+
+  - finish:
+      return: "OK"

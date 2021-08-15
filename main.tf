@@ -20,3 +20,7 @@ provider "google-beta" {
 module "integration-cloud-source-repository" {
   source = "./modules/integration-cloud-source-repository"
 }
+
+module "integration-cloud-firestore" {
+  source = "./modules/integration-cloud-firestore"
+}
