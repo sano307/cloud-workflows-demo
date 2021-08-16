@@ -11,7 +11,7 @@ main:
         url: https://${apigw_hostname}/hello
         timeout: 5
         query:
-          nickname: profile
+          nickname: sano307
       result: resp
 
   - logging_cloud_apigateway_get:
@@ -26,7 +26,7 @@ main:
         url: https://${apigw_hostname}/hello
         timeout: 5
         body:
-          nickname: profile
+          nickname: sano307
       result: resp
 
   - logging_cloud_apigateway_post:
