@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.0.0, < 1.1.0"
+  required_version = ">= 1.1.0, < 1.2.0"
 
   backend "gcs" {
     bucket = "YOUR_TFSTATE_BUCKET_NAME"
