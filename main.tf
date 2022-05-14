@@ -28,3 +28,7 @@ module "integration-cloud-firestore" {
 module "integration-cloud-api-gateway" {
   source = "./modules/integration-cloud-api-gateway"
 }
+
+module "integration-cloud-run-jobs" {
+  source = "./modules/integration-cloud-run-jobs"
+}
